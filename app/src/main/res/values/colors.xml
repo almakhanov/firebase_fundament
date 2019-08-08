@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_black">#ff232323</color>
+    <color name="background_gray">#ffeaeaea</color>
+    <color name="background_light_gray">#ffeef8f4</color>
+    <color name="background_white">#fff7f7f7</color>
+    <color name="black">#000000</color>
+    <color name="blue_50">#7000a6dd</color>
+    <color name="bottom_sheet_dialog_color">@color/white</color>
+    <color name="brand_red">#ffd81921</color>
+    <color name="colorAccent">@color/colorPrimary</color>
+    <color name="colorPrimary">#ff0080ff</color>
+    <color name="colorPrimaryDark">#ff005599</color>
+    <color name="dark_gray">#ff777777</color>
+    <color name="windowBackground">@color/colorPrimaryDark</color>
+    <color name="textColorPrimary">@color/black</color>
+    <color name="statusBarColor">@color/colorPrimaryDark</color>
+    <color name="navigationBarColor">@color/white</color>
+    <color name="gray">#ff8e8e8e</color>
+    <color name="green">#ff2bac76</color>
+    <color name="grey_blue">#ffa1bbc8</color>
+    <color name="light_black">#ff555555</color>
+    <color name="light_blue">#ff40a2d7</color>
+    <color name="light_gray">#ffbbbbbb</color>
+    <color name="grey_50">#fffafafa</color>
+    <color name="grey_100">#fff5f5f5</color>
+    <color name="grey_300">#ffe0e0e0</color>
+    <color name="gray_400">#ffbdbdbd</color>
+    <color name="grey_600">#ff757575</color>
+    <color name="grey_800">#ff424242</color>
+    <color name="grey_850">#ff303030</color>
+    <color name="grey_900">#ff212121</color>
+    <color name="orange">#fff27b2a</color>
+    <color name="purple">#ff7378e2</color>
+    <color name="red">#ffe84848</color>
+    <color name="colorTransparent">#00000000</color>
+    <color name="white">#ffffffff</color>
+    <color name="gold">#FFD700</color>
+
+    <color name="level1">@color/gray</color>
+    <color name="level2">#76ff76</color>
+    <color name="level3">#77ddbb</color>
+    <color name="level4">#aaf</color>
+    <color name="level5">#ff87ff</color>
+    <color name="level6">#ffcc87</color>
+    <color name="level7">#faba5b</color>
+    <color name="level8">#ff7777</color>
+    <color name="level9">#fe3433</color>
+    <color name="level10">#aa0001</color>
+
+    <color name="statusSuccess">#25b473</color>
+    <color name="darkGreen">#008400</color>
+</resources>

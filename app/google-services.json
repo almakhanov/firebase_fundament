@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "993636454207",
+    "firebase_url": "https://fundament-b97ad.firebaseio.com",
+    "project_id": "fundament-b97ad",
+    "storage_bucket": "fundament-b97ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993636454207:android:4468021929c31c7c",
+        "android_client_info": {
+          "package_name": "com.example.fundament"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993636454207-l40pbgfghsetcckfgu9226fkkj8s42v3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXwk8GnlA__bkw0T9yHRzcHGDpQYxYU_0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993636454207-l40pbgfghsetcckfgu9226fkkj8s42v3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
