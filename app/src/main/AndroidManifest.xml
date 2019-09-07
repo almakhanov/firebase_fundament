@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".presentation.registration.RegistrationActivity">
+        </activity>
+        <activity android:name=".presentation.auth.AuthActivity">
+        </activity>
         <activity
             android:name=".presentation.SplashActivity"
             android:screenOrientation="portrait"
@@ -24,11 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.sample.SampleActivity"
             android:screenOrientation="portrait"/>
-
     </application>
 
 </manifest>

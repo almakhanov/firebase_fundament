@@ -11,6 +11,7 @@ import com.example.fundament.entities.Sample
 import com.example.fundament.extensions.alert
 import com.example.fundament.extensions.toast
 import kotlinx.android.synthetic.main.activity_sample.*
+import kotlinx.coroutines.GlobalScope
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class SampleActivity : AppCompatActivity(), SampleAdapter.MyClickListener {

@@ -12,9 +12,9 @@ class SampleViewModel(private val repository: SampleRepository) : BaseViewModel(
         repository.postSample(sampleObject)
     }
 
-    fun getSamples(){
-        makeRequest({repository.getSamples()}){ res->
-            unwrap(res){
+    fun getSamples() {
+        makeRequest({ repository.getSamples() }) { res ->
+            unwrap(res) {
                 sampleListLiveData.value = it as ArrayList<Sample>
             }
         }

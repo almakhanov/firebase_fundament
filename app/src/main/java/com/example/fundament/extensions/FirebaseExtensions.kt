@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+
 fun <T> DatabaseReference.postData(tableName: String, data: T) {
     this.child(tableName).push().key?.let {
         this.child(tableName).child(it).setValue(data)
@@ -22,7 +23,7 @@ suspend inline fun <reified T> DatabaseReference.getData(tableName: String): Asy
             this@getData.child(tableName).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
                     continuation.resume(AsyncResult.Error(error.message, error.code))
-                }
+                } 
 
                 override fun onDataChange(data: DataSnapshot) {
                     val list = arrayListOf<T>()
