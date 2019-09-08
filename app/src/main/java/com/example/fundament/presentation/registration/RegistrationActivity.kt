@@ -2,7 +2,10 @@ package com.example.fundament.presentation.registration
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import com.example.fundament.R
+import com.example.fundament.extensions.alert
+import com.example.fundament.extensions.toast
 import kotlinx.android.synthetic.main.activity_registration.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 
@@ -22,5 +25,13 @@ class RegistrationActivity : AppCompatActivity() {
                 passwordEditText.text.toString()
             )
         }
+
+        viewModel.registrationLiveData.observe(this, Observer {
+            this.toast(it)
+        })
+
+        viewModel.messageLiveData.observe(this, Observer {
+            this.alert(message = it)
+        })
     }
 }

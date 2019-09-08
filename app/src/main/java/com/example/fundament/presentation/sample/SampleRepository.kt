@@ -9,8 +9,8 @@ import com.google.firebase.database.DatabaseReference
 
 class SampleRepository(private val firebase: DatabaseReference) {
 
-    fun postSample(sampleObject: Sample) {
-        firebase.postData(Table.SAMPLE, sampleObject)
+    suspend fun postSample(sampleObject: Sample): AsyncResult<Sample> {
+        return firebase.postData(Table.SAMPLE, sampleObject)
     }
 
     suspend fun getSamples(): AsyncResult<List<Sample>> {

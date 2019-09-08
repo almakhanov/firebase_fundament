@@ -1,6 +1,10 @@
 package com.example.fundament
 
 import com.example.fundament.base.CoroutineProvider
+import com.example.fundament.presentation.auth.AuthRepository
+import com.example.fundament.presentation.auth.AuthViewModel
+import com.example.fundament.presentation.registration.RegistrationRepository
+import com.example.fundament.presentation.registration.RegistrationViewModel
 import com.example.fundament.presentation.sample.SampleRepository
 import com.example.fundament.presentation.sample.SampleViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +29,23 @@ val appModule = module {
         SampleRepository(get())
     }
 
+    factory {
+        RegistrationRepository(get())
+    }
+
+    factory {
+        AuthRepository(get())
+    }
+
     viewModel {
         SampleViewModel(get())
+    }
+
+    viewModel {
+        RegistrationViewModel(get())
+    }
+
+    viewModel {
+        AuthViewModel(get())
     }
 }

@@ -9,7 +9,12 @@ class SampleViewModel(private val repository: SampleRepository) : BaseViewModel(
     val sampleListLiveData = MutableLiveData<ArrayList<Sample>>()
 
     fun postSample(sampleObject: Sample) {
-        repository.postSample(sampleObject)
+        makeRequest({repository.postSample(sampleObject)}){ res->
+            unwrap(res){
+                messageLiveData.value = "Успешно добавлено!"
+            }
+        }
+
     }
 
     fun getSamples() {

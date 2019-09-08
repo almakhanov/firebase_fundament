@@ -10,7 +10,7 @@ fun Context.toast(message: String, longToast: Boolean = true) {
     Toast.makeText(this, message, if(longToast) Toast.LENGTH_LONG else Toast.LENGTH_SHORT).show()
 }
 
-fun Context.alert(title: String, message: String, cancelable: Boolean = true){
+fun Context.alert(title: String = "Ошибка", message: String = "Что-то пошло не так", cancelable: Boolean = true){
     val dialog = AlertDialog.Builder(this)
         .setTitle(title)
         .setMessage(message)
