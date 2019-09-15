@@ -12,14 +12,16 @@ class RegistrationViewModel(val repository: RegistrationRepository) : BaseViewMo
     fun register(name: String, username: String, password: String) {
         makeRequest({ repository.register(User(name, username, password)) }) { res ->
             unwrap(res) {
-                registrationLiveData.value = "Вы успешно зарегистрировались!"
+                registrationLiveData.value = "Вы успешно зарегистрировались ${it.name}!"
             }
         }
     }
 
     fun registerWithGoogle(account: GoogleSignInAccount) {
-        makeRequest({repository.registerWithGoogle(User(account.givenName, account.email, account.id), account)}){
-
+        makeRequest({repository.registerWithGoogle(User(account.displayName, account.email, account.id), account)}){ res->
+            unwrap(res){
+                registrationLiveData.value = "Вы успешно зарегистрировались ${it.name}!"
+            }
         }
     }
 }

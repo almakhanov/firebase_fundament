@@ -86,24 +86,6 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val auth: FirebaseAuth = FirebaseAuth.getInstance()
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    toast(user.toString())
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    toast(task.exception.toString())
-                }
-            }
-    }
-
     companion object {
         const val RC_SIGN_IN_WITH_GOOGLE = 1321
         const val TAG = "super tag"

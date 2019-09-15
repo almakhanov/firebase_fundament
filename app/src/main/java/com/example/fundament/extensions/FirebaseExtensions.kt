@@ -1,11 +1,11 @@
 package com.example.fundament.extensions
 
+import com.example.fundament.App
 import com.example.fundament.entities.AsyncResult
 import com.example.fundament.entities.Table
 import com.example.fundament.entities.User
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
@@ -46,35 +46,23 @@ suspend inline fun <reified T> DatabaseReference.getData(tableName: String): Asy
     }
 }
 
-suspend inline fun FirebaseAuth.register(user: User): AsyncResult<User> {
-    return withContext(Dispatchers.Default) {
-        suspendCoroutine<AsyncResult<User>> { continuation ->
-            this@register.createUserWithEmailAndPassword(user.username.orEmpty(), user.password.orEmpty())
-                .addOnSuccessListener {
-                    val id = it?.user?.uid.orEmpty()
-                    FirebaseDatabase.getInstance().reference.child(Table.USER).child(id).setValue(user)
-                    continuation.resume(AsyncResult.Success(user))
-                }.addOnFailureListener {
-                    continuation.resume(AsyncResult.Error(it.localizedMessage.orEmpty(), 0))
-                }
-        }
-    }
-}
-
-suspend inline fun FirebaseAuth.login(username: String, password: String): AsyncResult<User>{
+suspend inline fun FirebaseAuth.login(username: String, password: String): AsyncResult<User> {
     return withContext(Dispatchers.Default) {
         suspendCoroutine<AsyncResult<User>> { continuation ->
             this@login.signInWithEmailAndPassword(username, password)
                 .addOnSuccessListener {
                     val id = it?.user?.uid.orEmpty()
+                    App.firebaseUser = this@login.currentUser
                     FirebaseDatabase.getInstance().reference.child(Table.USER).child(id)
-                        .addListenerForSingleValueEvent(object: ValueEventListener{
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onCancelled(p0: DatabaseError) {
                                 continuation.resume(AsyncResult.Error("Пользователь не найден", 0))
                             }
 
                             override fun onDataChange(p0: DataSnapshot) {
-                                continuation.resume(AsyncResult.Success(p0.getValue(User::class.java)))
+                                val user = p0.getValue(User::class.java)
+                                App.user = user
+                                continuation.resume(AsyncResult.Success(user))
                             }
                         })
                 }.addOnFailureListener {
@@ -84,15 +72,33 @@ suspend inline fun FirebaseAuth.login(username: String, password: String): Async
     }
 }
 
-
-suspend inline fun FirebaseAuth.registerWithGoogle(user: User, account: GoogleSignInAccount): AsyncResult<FirebaseUser> {
+suspend inline fun FirebaseAuth.register(user: User): AsyncResult<User> {
     return withContext(Dispatchers.Default) {
-        suspendCoroutine<AsyncResult<FirebaseUser>> { continuation ->
-            this@registerWithGoogle.signInWithCredential(GoogleAuthProvider.getCredential(account.idToken, null))
+        suspendCoroutine<AsyncResult<User>> { continuation ->
+            this@register.createUserWithEmailAndPassword(user.username.orEmpty(), user.password.orEmpty())
+                .addOnSuccessListener {
+                    val id = it?.user?.uid.orEmpty()
+                    App.firebaseUser = this@register.currentUser
+                    App.user = user
+                    FirebaseDatabase.getInstance().reference.child(Table.USER).child(id).setValue(user)
+                    continuation.resume(AsyncResult.Success(user))
+                }.addOnFailureListener {
+                    continuation.resume(AsyncResult.Error(it.localizedMessage.orEmpty(), 0))
+                }
+        }
+    }
+}
+
+suspend inline fun FirebaseAuth.authWithGoogle(user: User, account: GoogleSignInAccount): AsyncResult<User> {
+    return withContext(Dispatchers.Default) {
+        suspendCoroutine<AsyncResult<User>> { continuation ->
+            this@authWithGoogle.signInWithCredential(GoogleAuthProvider.getCredential(account.idToken, null))
                 .addOnSuccessListener {
                     val id = it?.user?.uid.orEmpty()
                     FirebaseDatabase.getInstance().reference.child(Table.USER).child(id).setValue(user)
-                    continuation.resume(AsyncResult.Success(this@registerWithGoogle.currentUser))
+                    App.firebaseUser = this@authWithGoogle.currentUser
+                    App.user = user
+                    continuation.resume(AsyncResult.Success(user))
                 }.addOnFailureListener {
                     continuation.resume(AsyncResult.Error(it.localizedMessage.orEmpty(), 0))
                 }
