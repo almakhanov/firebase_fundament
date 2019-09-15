@@ -3,7 +3,10 @@ package com.example.fundament.extensions
 import com.example.fundament.entities.AsyncResult
 import com.example.fundament.entities.Table
 import com.example.fundament.entities.User
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -81,3 +84,18 @@ suspend inline fun FirebaseAuth.login(username: String, password: String): Async
     }
 }
 
+
+suspend inline fun FirebaseAuth.registerWithGoogle(user: User, account: GoogleSignInAccount): AsyncResult<FirebaseUser> {
+    return withContext(Dispatchers.Default) {
+        suspendCoroutine<AsyncResult<FirebaseUser>> { continuation ->
+            this@registerWithGoogle.signInWithCredential(GoogleAuthProvider.getCredential(account.idToken, null))
+                .addOnSuccessListener {
+                    val id = it?.user?.uid.orEmpty()
+                    FirebaseDatabase.getInstance().reference.child(Table.USER).child(id).setValue(user)
+                    continuation.resume(AsyncResult.Success(this@registerWithGoogle.currentUser))
+                }.addOnFailureListener {
+                    continuation.resume(AsyncResult.Error(it.localizedMessage.orEmpty(), 0))
+                }
+        }
+    }
+}
