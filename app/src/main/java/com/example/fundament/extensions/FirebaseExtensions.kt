@@ -105,3 +105,13 @@ suspend inline fun FirebaseAuth.authWithGoogle(user: User, account: GoogleSignIn
         }
     }
 }
+
+suspend inline fun FirebaseAuth.logout(): AsyncResult<Unit> {
+    return withContext(Dispatchers.Default) {
+        suspendCoroutine<AsyncResult<Unit>> { continuation ->
+            this@logout.signOut()
+            return@suspendCoroutine continuation.resume(AsyncResult.Success())
+        }
+    }
+}
+
