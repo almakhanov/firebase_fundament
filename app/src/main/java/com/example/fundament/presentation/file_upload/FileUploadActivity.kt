@@ -47,7 +47,7 @@ class FileUploadActivity : AppCompatActivity() {
         }
 
         viewModel.downloadUriLiveData.observe(this, Observer {
-            photoAccountImageView.loadImage(it.toString(), this)
+            photoAccountImageView.loadImage(it.toString(), this, R.drawable.ic_account_circle_black_24dp)
         })
     }
 
