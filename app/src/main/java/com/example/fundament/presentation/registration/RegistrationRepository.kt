@@ -2,8 +2,10 @@ package com.example.fundament.presentation.registration
 
 import com.example.fundament.entities.AsyncResult
 import com.example.fundament.entities.User
+import com.example.fundament.extensions.authWithFacebook
 import com.example.fundament.extensions.register
 import com.example.fundament.extensions.authWithGoogle
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 
@@ -15,5 +17,9 @@ class RegistrationRepository(val auth: FirebaseAuth){
 
     suspend fun registerWithGoogle(user: User, account: GoogleSignInAccount): AsyncResult<User> {
         return auth.authWithGoogle(user, account)
+    }
+
+    suspend fun registerWithFacebook(accessToken: AccessToken?): AsyncResult<User> {
+        return auth.authWithFacebook(accessToken)
     }
 }

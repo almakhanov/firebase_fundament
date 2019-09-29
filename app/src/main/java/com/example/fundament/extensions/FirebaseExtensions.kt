@@ -5,7 +5,9 @@ import com.example.fundament.App
 import com.example.fundament.entities.AsyncResult
 import com.example.fundament.entities.Table
 import com.example.fundament.entities.User
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.*
@@ -152,6 +154,26 @@ suspend fun StorageReference.uploadFile(uri: Uri, fileFormat: String = "jpg"): A
                 .addOnFailureListener {
                     continuation.resume(AsyncResult.Error(it.localizedMessage.orEmpty(), 0))
                 }
+        }
+    }
+}
+
+suspend fun FirebaseAuth.authWithFacebook(accessToken: AccessToken?): AsyncResult<User> {
+    return withContext(Dispatchers.Default) {
+        suspendCoroutine<AsyncResult<User>> { continuation ->
+            this@authWithFacebook.signInWithCredential(
+                FacebookAuthProvider.getCredential(accessToken?.token.orEmpty())
+            ).addOnSuccessListener {
+                val id = it?.user?.uid.orEmpty()
+                val user = User(it.user?.displayName, it.user?.email, it.user?.uid)
+                FirebaseDatabase.getInstance().reference.child(Table.USER).child(id)
+                    .setValue(user)
+                App.firebaseUser = this@authWithFacebook.currentUser
+                App.user = user
+                continuation.resume(AsyncResult.Success(user))
+            }.addOnFailureListener {
+                continuation.resume(AsyncResult.Error(it.localizedMessage.orEmpty(), 0))
+            }
         }
     }
 }

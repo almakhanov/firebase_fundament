@@ -8,24 +8,15 @@ import androidx.lifecycle.Observer
 import com.example.fundament.R
 import com.example.fundament.extensions.alert
 import com.example.fundament.extensions.toast
-import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginResult
-import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.android.synthetic.main.activity_registration.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import com.facebook.login.LoginManager
 
 class RegistrationActivity : AppCompatActivity() {
 
@@ -35,6 +26,12 @@ class RegistrationActivity : AppCompatActivity() {
      * Нужно для регистрации через гугл аккаунт
      */
     private var gso: GoogleSignInOptions? = null
+
+    /**
+     * Нужно для регистрации через facebook аккаунт
+     */
+    private val callbackManager = CallbackManager.Factory.create()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,63 +85,22 @@ class RegistrationActivity : AppCompatActivity() {
      */
     private fun setFacebookAuth(){
         facebookBtn.setOnClickListener{
-            val callbackManager = CallbackManager.Factory.create()
-
-            LoginManager.getInstance().registerCallback(callbackManager,
-                object : FacebookCallback<LoginResult> {
-                    override fun onSuccess(loginResult: LoginResult) {
-                        toast("onSuccess")
-                    }
-
-                    override fun onCancel() {
-                        toast("onCancel")
-                    }
-
-                    override fun onError(exception: FacebookException) {
-                        toast("onError")
-                    }
-                })
+            buttonFacebookLogin.performClick()
         }
-
-//        val callbackManager = CallbackManager.Factory.create()
-//
-//        facebookBtnSimulate.setReadPermissions("email", "public_profile")
-//        facebookBtnSimulate.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-//            override fun onSuccess(loginResult: LoginResult) {
-//                Log.d(TAG, "facebook:onSuccess:$loginResult")
-//                handleFacebookAccessToken(loginResult.accessToken)
-//            }
-//
-//            override fun onCancel() {
-//                Log.d(TAG, "facebook:onCancel")
-//                // ...
-//            }
-//
-//            override fun onError(error: FacebookException) {
-//                Log.d(TAG, "facebook:onError", error)
-//                // ...
-//            }
-//        })
-    }
-
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        Log.d(TAG, "handleFacebookAccessToken:$token")
-
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        val auth = FirebaseAuth.getInstance()
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                }
-
-                // ...
+        buttonFacebookLogin.setReadPermissions("email", "public_profile")
+        buttonFacebookLogin.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                viewModel.registerWithFacebook(loginResult.accessToken)
             }
+
+            override fun onCancel() {
+                Log.d(TAG, "facebook:onCancel")
+            }
+
+            override fun onError(error: FacebookException) {
+                alert(message = error.localizedMessage)
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -156,6 +112,7 @@ class RegistrationActivity : AppCompatActivity() {
                 viewModel.registerWithGoogle(it)
             }
         }
+        callbackManager.onActivityResult(requestCode, resultCode, data)
     }
 
     companion object {
