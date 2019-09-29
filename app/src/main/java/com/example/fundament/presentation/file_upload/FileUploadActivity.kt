@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.example.fundament.R
 import com.example.fundament.base.Status
 import com.example.fundament.extensions.alert
+import com.example.fundament.extensions.loadImage
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_file_upload.*
 import org.koin.androidx.viewmodel.ext.android.getViewModel
@@ -46,7 +47,7 @@ class FileUploadActivity : AppCompatActivity() {
         }
 
         viewModel.downloadUriLiveData.observe(this, Observer {
-            photoAccountImageView.setImageURI(it)
+            photoAccountImageView.loadImage(it.toString(), this)
         })
     }
 
