@@ -42,7 +42,7 @@ class SharedPrefActivity : AppCompatActivity() {
     private fun getUser(): User {
         val gson = Gson()
         val json = pref.getString("myUser", "")
-        val obj = gson.fromJson<Any>(json, User::class.java) as User
+        val obj = gson.fromJson<User>(json, User::class.java) as User
         return obj
     }
 
