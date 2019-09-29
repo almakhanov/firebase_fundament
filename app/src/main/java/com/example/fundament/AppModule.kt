@@ -1,5 +1,6 @@
 package com.example.fundament
 
+import android.content.Context
 import com.example.fundament.base.CoroutineProvider
 import com.example.fundament.presentation.auth.AuthRepository
 import com.example.fundament.presentation.auth.AuthViewModel
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
@@ -47,6 +49,10 @@ val appModule = module {
 
     factory {
         FileUploadRepository(get())
+    }
+
+    single {
+        androidContext().getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
     }
 
     viewModel {
